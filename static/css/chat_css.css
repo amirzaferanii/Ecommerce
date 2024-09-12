@@ -1,0 +1,112 @@
+/* استایل کلی برای بدنه */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* استایل کانتینر چت */
+.chat-container {
+    width: 400px;
+    height: 600px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* استایل هدر چت */
+.chat-header {
+    background-color: #4caf50;
+    padding: 15px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    border-radius: 10px 10px 0 0;
+}
+
+/* استایل تصویر پروفایل */
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+/* استایل پیام‌ها */
+.chat-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+/* استایل پیام دریافتی */
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+
+.message.received {
+    background-color: #e0e0e0;
+    align-self: flex-start; /* نمایش پیام دریافتی سمت چپ */
+    text-align: left;
+}
+
+/* استایل پیام ارسالی */
+.message.sent {
+    background-color: #4caf50;
+    color: #fff;
+    align-self: flex-end; /* نمایش پیام ارسالی سمت راست */
+    text-align: right;
+}
+
+/* استایل بخش ورودی پیام */
+.chat-input {
+    display: flex;
+    border-top: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 0 0 10px 10px;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+.chat-input button {
+    background-color: #4caf50;
+    border: none;
+    padding: 10px 15px;
+    color: #fff;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* حالت هاور برای دکمه ارسال */
+.chat-input button:hover {
+    background-color: #45a049;
+}

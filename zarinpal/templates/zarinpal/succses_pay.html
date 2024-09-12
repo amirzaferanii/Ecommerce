@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرداخت موفق</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .success-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            direction: rtl;
+        }
+        .success-icon {
+            font-size: 5rem;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container success-container">
+    <div>
+        <i class="success-icon">&#10004;</i>
+        <h1 class="mt-4">پرداخت شما با موفقیت انجام شد!</h1>
+        <p class="mt-3">از خرید شما متشکریم. جزئیات تراکنش به شرح زیر است:</p>
+        <ul class="list-unstyled mt-4">
+            <li><strong>کد رهگیری:</strong> {{ RefID }}</li>
+            <li><strong>مبلغ پرداختی:</strong> {{ amount }} تومان</li>
+        </ul>
+        <a href="{% url 'home:home' %}" class="btn btn-primary mt-4">بازگشت به صفحه اصلی</a>
+    </div>
+</div>
+
+</body>
+</html>

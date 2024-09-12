@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block main %}
+<style>
+    .form-section {
+        width: 50%;
+        margin: 50px auto; /* مرکز کردن فرم در صفحه */
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div class="form-section">
+    <h2>Edit Profile Photo</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="name">Profile:</label>
+        {{ form.profile }}
+        <button type="submit">Update</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<!DOCTYPE html>
+    <style>
+    .edit-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+    cursor: pointer;
+    float: right; /* قرار دادن دکمه‌ها در سمت راست */
+}
+
+.edit-btn i {
+    font-size: 15px; /* کوچک‌تر کردن اندازه آیکن */
+    color: #f0c14b; /* رنگ زرد متناسب با تم سازمانی */
+}
+
+.edit-btn:hover i {
+    color: #e6b329; /* رنگ آیکن در حالت hover */
+}
+
+.info p {
+    position: relative;
+    padding-right: 10px; /* فاصله از سمت راست برای آیکن */
+}
+
+.info strong {
+    display: inline-block;
+    width: 100px; /* تنظیم عرض برای جلوگیری از تداخل با آیکن */
+}
+@font-face {
+    font-family: Peyda;
+    src: url("{% static 'fonts/Peyda-Medium[@fontbazi].ttf' %}") format("truetype");
+}
+
+    .user-profile{
+        font-family: Peyda, sans-serif;
+        font-size: 40px;
+    }
+    .fullname{
+        font-family: Peyda, sans-serif;
+    }
+    .user-email{
+        font-family: Peyda, sans-serif;
+    }
+    .user-bio{
+        font-family: Peyda, sans-serif;
+    }
+
+    </style>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserProfile</title>
+    <link rel="stylesheet" href="{% static 'css/style_profile.css' %}">
+    <!-- اضافه کردن فونت آوسام -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            <h1 class="user-profile">User Profile</h1>
+            <div class="profile-info">
+            {% if user == request.user %}
+                <a class="d-print-flex" href="{% url 'account:profile_edit_photo' request.user.slug %}"><i class="fas fa-camera-retro"></i></a>
+            {% endif %}
+                {% if user.profile %}
+                  <img src="{{ user.profile.url }}" alt="profile_photo" class="profile-pic">
+                {% else %}
+                <img src="{% static 'img/user_not.png' %}" alt="profile_photo" class="profile-pic">
+                {% endif %}
+
+                <div class="info">
+                    <p class="fullname" ><strong>Name :</strong> {{ user.fullname }}
+                        {% if user == request.user %}
+                        <a href="{% url 'account:profile_edit_fullname' request.user.slug %}" class="edit-btn">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        {% endif %}
+                    </p>
+                    <p class="user-email">
+                        <strong>Email :</strong> {{ user.email }}
+                        {% if user == request.user %}
+                        <a href="{% url 'account:profile_edit_email' request.user.slug %}" class="edit-btn">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        {% endif %}
+                    </p>
+                    <p class="user-bio">
+                        <strong>Bio :</strong> {{ user.bio }}
+                        {% if user == request.user %}
+                        <a href="{% url 'account:profile_edit_bio' request.user.slug %}" class="edit-btn">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        {% endif %}
+                    </p>
+                </div>
+            <a href="{% url 'chatuser:profile_chat_user' user.slug %}" class="btn btn-success"><i class="fas fa-message"> M e s s a g e</i></a>
+            </div>
+        </div>
+     {% if user == request.user %}
+    <a href="{% url 'chatuser:profile_chat_list' request.user.slug %}" class="btn btn-success"><i class="fas fa-list"> C h a t L i s t</i></a>
+    {% endif %}
+        {% if user == request.user %}
+            <div class="btn btn-danger rounded"><a href="{% url 'account:logout' %}"> LogOut </a></div>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

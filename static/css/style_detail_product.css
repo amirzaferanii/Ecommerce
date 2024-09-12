@@ -1,0 +1,17 @@
+.like-button {
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 24px; /* اندازه آیکون */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.like-button.liked {
+    color: #e1306c; /* رنگ قرمز مشابه اینستاگرام */
+}
+
+.like-button.not-liked {
+    color: #999; /* رنگ خاکستری برای قلب توخالی */
+
+}

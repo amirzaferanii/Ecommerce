@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>List of Likers</title>
+        <!-- اضافه کردن فونت Awesome برای آیکون‌ها -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <!-- اضافه کردن بوت‌استرپ برای استایل‌های پایه -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+        <style>
+            body {
+                background-color: #f8f9fa; /* رنگ پس‌زمینه روشن */
+            }
+
+            .container {
+                margin-top: 50px;
+                background-color: #fff; /* رنگ پس‌زمینه سفید برای کارت‌ها */
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+
+            .liker-list {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .liker-list-item {
+                display: flex;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .liker-list-item:last-child {
+                border-bottom: none;
+            }
+
+            .liker-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #ffc107; /* رنگ زرد سازمانی */
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 15px;
+                font-size: 18px;
+                overflow: hidden; /* اطمینان از برش مناسب عکس‌ها */
+            }
+
+            .liker-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* برش مناسب عکس‌ها */
+            }
+
+            .liker-name {
+                font-size: 16px;
+                font-family: MyCustomFont, sans-serif;
+            }
+
+            .liker-name {
+                font-weight: bold;
+                width: 40px;
+            }
+
+            .liker-date {
+                color: gray;
+                font-size: 0.9em;
+            }
+
+            @font-face {
+                font-family: MyCustomFont;
+                src: url("{% static 'fonts/Peyda-Medium[@fontbazi].ttf' %}")format("truetype");
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            .liker-phone {
+                font-family: MyCustomFont, sans-serif;
+                font-size : 13px;
+            }
+
+        </style>
+    </head>
+    <body>
+    <div class="container">
+        <h2 class="text-center mb-4">List of Likers</h2>
+        <ul class="liker-list">
+            {% for liker in liker %}
+                <li class="liker-list-item d-flex justify-content-between align-items-center">
+                    <div class="liker-avatar-name d-flex align-items-center">
+                        <div class="liker-avatar">
+                            {% if liker.user.profile %}
+                                <img src="{{ liker.user.profile.url }}" alt="{{ liker.user.fullname }}">
+                            {% else %}
+                                <i class="fas fa-user"></i>
+                            {% endif %}
+                        </div>
+                        <div class="liker-container ml-3">
+                            <span class="liker-name">{{ liker.user.fullname }}</span>
+                            <a href="{% url 'account:profile' liker.user.slug %}" class="liker-phone"> ({{ liker.user|truncatechars:5 }}*******)</a>
+                        </div>
+                    </div>
+                    <div class="liker-date">
+                        <span>{{ liker.created }}</span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="javascript:history.back()" class="btn btn-warning mb-3"><i class="fas fa-arrow-left"></i></a>
+    </div>
+
+    <!-- اضافه کردن اسکریپت‌های بوت‌استرپ -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
+
+
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="container-fluid">
+        {% if not cart.cart %}
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <img src="{% static 'img/cart.jpg' %}" alt="Empty Cart" style="width: 100%; max-width: 400px;">
+                    <h3 class="mt-3">چیزی در سبد خرید وجود ندارد</h3>
+                </div>
+            </div>
+        {% else %}
+            <div class="row px-xl-5">
+                <div class="col-lg-8 table-responsive mb-5">
+                    <table class="table table-light table-borderless table-hover text-center mb-0">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Images</th>
+                            <th>Title</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Color</th>
+                            <th>Size</th>
+                            <th>Total</th>
+                            <th>Remove</th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="align-middle">
+                        {% for item in cart %}
+                            <tr>
+                                <td class="align-middle"><img src="{{ item.product.image.url }}" alt="" style="width: 50px;"></td>
+                                <td class="align-middle">{{ item.product.title }}</td>
+                                <td class="align-middle">${{ item.price }}</td>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus" data-action="decrease"
+                                                    data-unique-id="{{ item.unique_id }}">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text"
+                                               class="form-control form-control-sm bg-secondary border-0 text-center"
+                                               value="{{ item.quantity }}" data-unique-id="{{ item.unique_id }}">
+                                        <div class="input-group-btn">
+                                            <button data-action="increase" type="button"
+                                                    class="btn btn-sm btn-primary btn-plus"
+                                                    data-unique-id="{{ item.unique_id }}">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle">{{ item.color }}</td>
+                                <td class="align-middle">{{ item.size }}</td>
+                                <td class="align-middle" data-unique-id="{{ item.unique_id }}">${{ item.total }}</td>
+                                <td class="align-middle">
+                                    <a href="{% url 'cart:cart_delete' item.unique_id %}" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+                {% if cart.cart %}
+                    <div class="col-lg-4">
+                        <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+                        <div class="bg-light p-30 mb-5">
+                            <div class="border-bottom pb-2">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h6>Subtotal</h6>
+                                    <h6 id="factor-sub-total">${{ cart.sub_total }}</h6>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <strong class="text-dark mr-3">Shipping type</strong>
+                                    {% csrf_token %}
+                                    {% for ship in shippings.all %}
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" class="custom-control-input" id="shiping-{{ forloop.counter }}"
+                                                   name="shiping" value="{{ ship.title }}" {% if forloop.first %}checked{% endif %}>
+                                            <label class="custom-control-label" for="shiping-{{ forloop.counter }}">{{ ship.title }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-medium">Shipping</h6>
+                                    <h6 id="factor-shipping" class="font-weight-medium">${{ cart.shipping }}</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <h5>Total</h5>
+                                <h5 id="factor-total">${{ cart.total }}</h5>
+                            </div>
+                            <a id="checkout-link" href="{% url 'cart:order_creation' %}" class="btn btn-block btn-primary font-weight-bold my-3 py-3">
+                                Proceed To Checkout
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function checkShippingVisibility() {
+                var selectedShipping = $('input[name="shiping"]:checked').val();
+
+                $.ajax({
+                    url: "{% url 'cart:calculate_total_with_shipping' %}",
+                    type: 'POST',
+                    data: {
+                        'shipping_title': selectedShipping,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        var shippingCost = response.total_with_shipping - $('#factor-sub-total').text().replace('$', '');
+
+                        if (shippingCost == 0) {
+                            $('#factor-shipping').hide();
+                        } else {
+                            $('#factor-shipping').show();
+                            $('#factor-shipping').text('$' + shippingCost);
+                        }
+
+                        $('#factor-total').text('$' + response.total_with_shipping);
+                    }
+                });
+            }
+
+            checkShippingVisibility();
+
+            $('.btn-plus, .btn-minus').on('click', function () {
+                var uniqueId = $(this).data('unique-id');
+                var action = $(this).data('action');
+                var shippingTitle = $('input[name="shiping"]:checked').val();
+
+                $.ajax({
+                    url: "{% url 'cart:update_cart_item_quantity' %}",
+                    type: 'POST',
+                    data: {
+                        'unique_id': uniqueId,
+                        'action': action,
+                        'shipping_title': shippingTitle,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        $('input[data-unique-id="' + uniqueId + '"]').val(response.quantity);
+                        $('td[data-unique-id="' + uniqueId + '"]').text('$' + response.item_total);
+                        $('#factor-sub-total').text('$' + response.cart_sub_total);
+                        $('#factor-shipping').text('$' + response.shipping);
+                        $('#factor-total').text('$' + response.cart_total);
+
+                        checkShippingVisibility();
+                    }
+                });
+            });
+
+            $('input[name="shiping"]').on('change', function () {
+                var shippingTitle = $(this).val();
+
+                $.ajax({
+                    url: "{% url 'cart:calculate_total_with_shipping' %}",
+                    type: 'POST',
+                    data: {
+                        'shipping_title': shippingTitle,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        $('#factor-total').text('$' + response.total_with_shipping);
+                        checkShippingVisibility();
+                    }
+                });
+            });
+        });
+
+        document.getElementById('checkout-link').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const shippingOption = document.querySelector('input[name="shiping"]:checked').value;
+            const url = "{% url 'cart:order_creation' %}?shiping=" + encodeURIComponent(shippingOption);
+
+            window.location.href = url;
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیست چت‌های کاربر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-list {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .chat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .chat-item:last-child {
+            border-bottom: none;
+        }
+        .chat-item .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .chat-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-item .username {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .chat-item .last-message {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .chat-item a {
+            text-decoration: none;
+            color: #333;
+        }
+        .chat-item a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-list">
+        <h2>Your Chat List</h2>
+
+        {% for chat in chats %}
+        <div class="chat-item">
+            <a href="{% url 'chatuser:profile_chat_user' chat.sender.slug %}">
+                <div class="user-info">
+                    <img src="{{ chat.sender.profile.url }}" alt="Profile Picture">
+                    <div>
+                        <span class="username">{{ chat.sender.fullname }}</span>
+                        <p class="last-message">{{ chat.content }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+     {% for chat in chat_send %}
+        <div class="chat-item">
+            <a href="{% url 'chatuser:profile_chat_user' chat.receiver.slug %}">
+                <div class="user-info">
+                    <img src="{{ chat.receiver.profile.url }}" alt="Profile Picture">
+                    <div>
+                        <span class="username">{{ chat.receiver.fullname }}</span>
+                        <p class="last-message">{{ chat.content }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</body>
+</html>
+
+{% endblock %}

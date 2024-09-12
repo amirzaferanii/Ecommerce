@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرداخت ناموفق</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .fail-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            direction: rtl;
+        }
+        .fail-icon {
+            font-size: 5rem;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container fail-container">
+    <div>
+        <i class="fail-icon">&#10008;</i>
+        <h1 class="mt-4">پرداخت ناموفق بود</h1>
+        <p class="mt-3">{{ message }}</p>
+        <a href="#" class="btn btn-primary mt-4">بازگشت به صفحه اصلی</a>
+    </div>
+</div>
+
+</body>
+</html>

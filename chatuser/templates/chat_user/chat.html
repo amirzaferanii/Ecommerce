@@ -1,0 +1,34 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/chat_css.css' %}">
+</head>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <img src="{{ user.profile.url }}" alt="profile_photo" class="profile-pic">
+        <a href="{% url 'account:profile' user.slug %}">{{ user.fullname }}</a>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+        {% for message in messages %}
+            <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                {{ message.content }}
+            </div>
+        {% endfor %}
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="chat-input">
+            <input name="content" type="text" placeholder="Send Your Message..." required>
+            <button type="submit">Send</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function scrollToBottom() {
+        var chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    window.onload = scrollToBottom;
+</script>
